@@ -1,98 +1,46 @@
-
 const Engine = Matter.Engine;
-const World = Matter.World;
+const World= Matter.World;
 const Bodies = Matter.Bodies;
-const Body = Matter.Body;
 
-var mango1,mango2,mango3,mango4,mango5;
-var tree,rock,boy,mango;
-var treeImg,boyImg;
-var ground;
-function preload()
-{
-	boyImg = loadImage("sprites/boy.png");
-	treeImg = loadImage("sprites/tree.png");
-	
-	
-}
+var engine, world;
+var ground,ball,crumpledPaper;
+var binImg,bin;
 
-function setup() {
-	createCanvas(1500, 700);
-	engine = Engine.create();
-	world = engine.world;
-	strokeWeight(4)
-	ground = new Ground(750,700,1500,5);
-
-	boy = createSprite(150,600,25,150)
-	boy.addImage(boyImg)
-	boy.scale =0.15;
-	
-	tree = createSprite(1000,388,25,150)
-	tree.addImage(treeImg)
-	tree.scale = 0.5
-	
-	mango1 = new Mango(600,150);
-	mango2 = new Mango(550,100);
-	mango3 = new Mango(450,160);
-	mango4 = new Mango(500,140);
-
-	rock = new Stone(25,250,rock,boy)
-	rock.scale = 0.1 
-
-	Engine.run(engine);
+function preload(){
+    binImg = loadImage("Images/box.png");
   
 }
+function setup(){
+    var canvas = createCanvas(1200,600);
+    engine = Engine.create();
+    world = engine.world;
 
+    ground = new Ground(600,600,1200,5);
+    crumpledPaper = new Paper(400,580,10);
+    
 
-function draw() {
-  background(255,255,255);
-  Engine.update(engine);
+    bin = createSprite(964,520,20,20);
+    bin.addImage(binImg);
+    bin.scale = 0.45;
 
- 
-	
-	
-  ground.display();
-  
-  drawSprites();
-  mango1.display();
-  mango2.display();
-  mango3.display();
-  mango4.display();
-  rock.display();
-
-  detectcollision(stone,mango1)
-  detectcollision(stone,mango2)
-  detectcollision(stone,mango3)
-  detectcollision(stone,mango4)
-
- 
-
- 
+    bin1 = new box(900,510,10,120);
+    bin2 = new box(960,565,130,10);
+    bin3 = new box(1025,510,10,120);
 }
 
-function detectcollision(lstone,lmango){
-	mangoBodyPosition =lmango.body.position
-	stoneBodyPosition = lstone.body.position
-
-	var distance = dist(stoneBodyPosition.x,stoneBodyPosition.y,mangoBodyPosition.x,mangoBodyPosition.y)
-	if(distance<=lmango.r+lstone.r){
-		Matter.body.setStatic(lmango.body,false	);
-	}
+function draw(){
+    background(255,255,255);
+    Engine.update(engine);
+    ground.display();
+    crumpledPaper.display();
+    bin1.display();
+    bin2.display();
+    bin3.display(); 
+    drawSprites();
 }
 
-function mouseDragged(){
-	Matter.Body.setPosition(rock.body,{ x: mouseX, y: mouseY })
-	
-	}
-	
-	function mouseReleased(){
-		rock.fly();
-		
-		}
-
-		function keypressed(){
-			if(keyCode === 32 ){
-				Matter.Body.setPosition(stoneObj.body,{x:235, y :420})
-				launcherObject.attach(stoneObj.body)
-			}
-		}
+function keyPressed(){
+    if(keyCode === UP_ARROW){
+        Matter.Body.applyForce(crumpledPaper.body,crumpledPaper.body.position,{x:74,y:-75});
+    }
+}
